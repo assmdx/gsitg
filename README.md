@@ -1,6 +1,6 @@
 # gsitg
 
-A static source code tool, which is used to analysis the module dependency of your go package source code.
+A static source code analysis tool, which is used to analysis and visualize the module dependency of your go package source code.
 
 ## Installtion
 
