@@ -12,6 +12,7 @@ import (
 	"github.com/assmdx/gsitg/utils/io"
 	"github.com/freenerd/go-import-extractor/extractor"
 	"github.com/goccy/go-graphviz"
+	"github.com/gogf/gf/encoding/ghash"
 )
 
 type Mapping struct {
@@ -35,6 +36,10 @@ func genDAG(goFiles []string) {
 		for _, mapping := range mappings {
 			dagFrom := dagSet[mapping.from]
 			dagTo := dagSet[mapping.to]
+
+			if !strings.Contains(mapping.to, packageName) {
+				continue
+			}
 
 			if dagFrom == nil {
 				dagFrom = &DAG{importedCount: 0, module: mapping.from, importModules: make([]*DAG, 0)}
@@ -120,7 +125,8 @@ func genPng(pngFilePath string) {
 			error_.ErrorHandler(err)
 			e, err := graph.CreateEdge("___"+dag.module, rootNode, rootToNode)
 			error_.ErrorHandler(err)
-			e.SetLabel("___" + dag.module)
+			label := fmt.Sprint(ghash.BKDRHash([]byte("___" + dag.module)))
+			e.SetLabel(label)
 		}
 
 		if len(dag.importModules) == 0 {
@@ -136,9 +142,8 @@ func genPng(pngFilePath string) {
 
 			e, err := graph.CreateEdge(module+to.module, fromNode, toNode)
 			error_.ErrorHandler(err)
-			e.SetLabel(module + to.module)
-
-			fmt.Println("edge: ", module, " -> ", to.module)
+			label := fmt.Sprint(ghash.BKDRHash([]byte(module + to.module)))
+			e.SetLabel(label)
 		}
 	}
 
