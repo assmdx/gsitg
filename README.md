@@ -13,6 +13,9 @@ go get github.com/assmdx/gsitg
 ```
 gsitg.dep.Analysis(yourPackageName, sourceCodeDir, resultPngFilePath)
 ```
+You will get the result like this:
+
+![](https://s3.ax1x.com/2020/12/08/DzRMB4.png)
 
 ## Test
 
